@@ -6,7 +6,7 @@
 
 #include <cstdlib>
 #include <iostream>
-#include <filesystem>
+#include <fstream>
 
 #include <retdec/retdec/retdec.h>
 
@@ -27,7 +27,8 @@ class ProgramOptions
 				if (c == "-i")
 				{
 					inputFile = getParamOrDie(argc, argv, i);
-					if (!std::filesystem::exists(inputFile))
+					std::ifstream f(inputFile.c_str());
+					if (!f.good())
 					{
 						printHelpAndDie();
 					}
