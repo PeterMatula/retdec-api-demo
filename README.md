@@ -20,5 +20,5 @@ make install
 ## Use
 
 ```
-<install_path>/demo -i tests/<file>
+<install_path>/bin/demo -i tests/<file>
 ```
