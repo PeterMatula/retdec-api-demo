@@ -57,15 +57,23 @@ set(LLVM_LIB_LIST
 	LLVMPasses
 )
 
+message(STATUS "===========> ${binary_dir}")
+
 add_library(retdec-api INTERFACE)
 add_dependencies(retdec-api retdec-project)
 target_include_directories(retdec-api SYSTEM INTERFACE
 	${source_dir}/include
 	${source_dir}/deps/variant/include
-	${binary_dir}/deps/src/elfio-project/include
-	${binary_dir}/deps/src/llvm-project/include
-	${binary_dir}/deps/src/llvm-project-build/include
-	${binary_dir}/deps/src/pelib-project/include
+	${binary_dir}/external/src/pelib-project/include
+	${binary_dir}/external/src/jsoncpp-project/include
+	${binary_dir}/external/src/elfio-project/include
+	${binary_dir}/external/src/yaracpp-project/include
+	${binary_dir}/external/src/capstone-project/include
+	${binary_dir}/external/src/libdwarf-project/libdwarf
+	${binary_dir}/external/src/libdwarf-project/libelf/lib
+	${binary_dir}/external/src/llvm-project/include
+	${binary_dir}/external/src/llvm-project-build/include
+	${binary_dir}/external/src/yaracpp-project-build/deps/yara/src/yara/libyara/include
 )
 
 target_link_libraries(retdec-api INTERFACE optimized
@@ -95,7 +103,6 @@ target_link_libraries(retdec-api INTERFACE optimized
 
 	${binary_dir}/external/src/pelib-project-build/src/pelib/libpelib${CMAKE_STATIC_LIBRARY_SUFFIX}
 	${binary_dir}/external/src/jsoncpp-project-build/src/lib_json/libjsoncpp${CMAKE_STATIC_LIBRARY_SUFFIX}
-	${binary_dir}/external/src/yaracpp-project-build/src/libyaracpp${CMAKE_STATIC_LIBRARY_SUFFIX}
 	${binary_dir}/external/src/yaracpp-project-build/src/libyaracpp${CMAKE_STATIC_LIBRARY_SUFFIX}
 	${binary_dir}/external/src/capstone-project-build/libcapstone${CMAKE_STATIC_LIBRARY_SUFFIX}
 	${binary_dir}/external/src/libdwarf-project-build/libdwarf/libdwarf/libretdec-libdwarf${CMAKE_SHARED_LIBRARY_SUFFIX}
