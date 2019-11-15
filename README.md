@@ -12,13 +12,12 @@ Small demo that shows how to use RetDec API Poc in other projects.
 ```
 mkdir build
 cd build
-cmake .. -DCMAKE_INSTALL_PREFIX=<install_path>
+cmake ..
 make -j<N>
-make install
 ```
 
 ## Use
 
 ```
-<install_path>/bin/demo -i tests/<file>
+build/demo/demo -i tests/<file>
 ```
