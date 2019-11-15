@@ -12,8 +12,8 @@ if(CMAKE_CXX_COMPILER)
 endif()
 
 ExternalProject_Add(retdec-project
-	URL https://github.com/avast/retdec/archive/fee4405d8c107fce925429a7c7dd638e0770f82e.zip
-	URL_HASH SHA256=db90832f28111fec1a0c25710fd80177f515d647805cea7970ec025ab9c5a36f
+	URL https://github.com/avast/retdec/archive/55ac3df7a9741a246263225f418e97de9f4ac957.zip
+	URL_HASH SHA256=9ec7332d91bfd59dc9a50bcc92f0feac4754d2efbf7361a994ab1f69fb4b370b
 	DOWNLOAD_NAME retdec.zip
 	CMAKE_GENERATOR ${CMAKE_GENERATOR}
 	CMAKE_GENERATOR_PLATFORM ${CMAKE_GENERATOR_PLATFORM}
