@@ -12,8 +12,8 @@ if(CMAKE_CXX_COMPILER)
 endif()
 
 ExternalProject_Add(retdec-project
-	URL https://github.com/avast/retdec/archive/55ac3df7a9741a246263225f418e97de9f4ac957.zip
-	URL_HASH SHA256=9ec7332d91bfd59dc9a50bcc92f0feac4754d2efbf7361a994ab1f69fb4b370b
+	URL https://github.com/avast/retdec/archive/08f5275fdb7c2cc7a574c8f286038edcc9697d2a.zip
+	URL_HASH SHA256=79abae41898a16ba880f86def75fc7406f748485f5fa937b26a3102e59d8de85
 	DOWNLOAD_NAME retdec.zip
 	CMAKE_GENERATOR ${CMAKE_GENERATOR}
 	CMAKE_GENERATOR_PLATFORM ${CMAKE_GENERATOR_PLATFORM}
@@ -56,8 +56,6 @@ set(LLVM_LIB_LIST
 	LLVMObject
 	LLVMPasses
 )
-
-message(STATUS "===========> ${binary_dir}")
 
 add_library(retdec-api INTERFACE)
 add_dependencies(retdec-api retdec-project)
