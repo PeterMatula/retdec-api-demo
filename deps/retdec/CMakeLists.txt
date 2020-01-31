@@ -12,13 +12,16 @@ if(CMAKE_CXX_COMPILER)
 endif()
 
 ExternalProject_Add(retdec-project
-	URL https://github.com/avast/retdec/archive/39168f30ca24380d975a60b259e34793726350e0.zip
-	URL_HASH SHA256=50f8fbec286960a26a9ccc9a46af4984ef85ff828032387579cfe8dbf897402a
+	URL https://github.com/avast/retdec/archive/c30c33ef15dd1d2114b8fddf702e2d8e72604555.zip
+	URL_HASH SHA256=d942b5ead5679e393457aa695a2cee8cc963cb51121c7721aeb35a98ad2c3e5c
 	DOWNLOAD_NAME retdec.zip
 	CMAKE_GENERATOR ${CMAKE_GENERATOR}
 	CMAKE_GENERATOR_PLATFORM ${CMAKE_GENERATOR_PLATFORM}
 	CMAKE_ARGS
 		-D CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+		# Enable only those RetDec components that are actually used.
+		-D RETDEC_ENABLE_RETDEC=ON
+		-D RETDEC_ENABLE_RETDECTOOL=ON
 		# Force the use of the same compiler as used to build the top-level
 		# project. Otherwise, the external project may pick up a different
 		# compiler, which may result in link errors.
@@ -35,6 +38,7 @@ ExternalProject_Get_Property(retdec-project source_dir)
 ExternalProject_Get_Property(retdec-project binary_dir)
 
 set(LLVM_LIB_LIST
+	LLVMDebugInfoDWARF
 	LLVMBitWriter
 	LLVMIRReader
 	LLVMObject
@@ -61,17 +65,10 @@ add_library(retdec-api INTERFACE)
 add_dependencies(retdec-api retdec-project)
 target_include_directories(retdec-api SYSTEM INTERFACE
 	${source_dir}/include
-	${source_dir}/deps/variant/include
-	${binary_dir}/external/src/pelib-project/include
-	${binary_dir}/external/src/jsoncpp-project/include
-	${binary_dir}/external/src/elfio-project/include
-	${binary_dir}/external/src/yaracpp-project/include
+	${source_dir}/include/retdec
 	${binary_dir}/external/src/capstone-project/include
-	${binary_dir}/external/src/libdwarf-project/libdwarf
-	${binary_dir}/external/src/libdwarf-project/libelf/lib
 	${binary_dir}/external/src/llvm-project/include
 	${binary_dir}/external/src/llvm-project-build/include
-	${binary_dir}/external/src/yaracpp-project-build/deps/yara/src/yara/libyara/include
 )
 
 target_link_libraries(retdec-api INTERFACE optimized
@@ -84,7 +81,6 @@ target_link_libraries(retdec-api INTERFACE optimized
 	${binary_dir}/src/loader/libretdec-loader${CMAKE_STATIC_LIBRARY_SUFFIX}
 	${binary_dir}/src/fileformat/libretdec-fileformat${CMAKE_STATIC_LIBRARY_SUFFIX}
 	${binary_dir}/src/debugformat/libretdec-debugformat${CMAKE_STATIC_LIBRARY_SUFFIX}
-	${binary_dir}/src/dwarfparser/libretdec-dwarfparser${CMAKE_STATIC_LIBRARY_SUFFIX}
 	${binary_dir}/src/capstone2llvmir/libretdec-capstone2llvmir${CMAKE_STATIC_LIBRARY_SUFFIX}
 	${binary_dir}/src/stacofin/libretdec-stacofin${CMAKE_STATIC_LIBRARY_SUFFIX}
 	${binary_dir}/src/llvm-support/libretdec-llvm-support${CMAKE_STATIC_LIBRARY_SUFFIX}
@@ -98,13 +94,11 @@ target_link_libraries(retdec-api INTERFACE optimized
 	${binary_dir}/src/ctypes/libretdec-ctypes${CMAKE_STATIC_LIBRARY_SUFFIX}
 	${binary_dir}/src/utils/libretdec-utils${CMAKE_STATIC_LIBRARY_SUFFIX}
 	${binary_dir}/src/pdbparser/libretdec-pdbparser${CMAKE_STATIC_LIBRARY_SUFFIX}
+	${binary_dir}/src/pelib/libpelib${CMAKE_STATIC_LIBRARY_SUFFIX}
+	${binary_dir}/src/yaracpp/libretdec-yaracpp${CMAKE_STATIC_LIBRARY_SUFFIX}
 
-	${binary_dir}/external/src/pelib-project-build/src/pelib/libpelib${CMAKE_STATIC_LIBRARY_SUFFIX}
-	${binary_dir}/external/src/jsoncpp-project-build/src/lib_json/libjsoncpp${CMAKE_STATIC_LIBRARY_SUFFIX}
-	${binary_dir}/external/src/yaracpp-project-build/src/libyaracpp${CMAKE_STATIC_LIBRARY_SUFFIX}
 	${binary_dir}/external/src/capstone-project-build/libcapstone${CMAKE_STATIC_LIBRARY_SUFFIX}
-	${binary_dir}/external/src/libdwarf-project-build/libdwarf/libdwarf/libretdec-libdwarf${CMAKE_SHARED_LIBRARY_SUFFIX}
-	${binary_dir}/external/src/yaracpp-project-build/deps/yara/src/yara/libyara/.libs/libyara${CMAKE_STATIC_LIBRARY_SUFFIX}
+	${binary_dir}/deps/yara/yara/src/yara/libyara/.libs/libyara${CMAKE_STATIC_LIBRARY_SUFFIX}
 	ssl
 	crypto
 	Threads::Threads
